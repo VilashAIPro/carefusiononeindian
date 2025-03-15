@@ -8,13 +8,15 @@ import AppointmentBooking from '@/components/patient/AppointmentBooking';
 import MedicalRecords from '@/components/patient/MedicalRecords';
 import EmergencyContact from '@/components/patient/EmergencyContact';
 import HealthSuggestions from '@/components/patient/HealthSuggestions';
+import AIChatbot from '@/components/patient/AIChatbot';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   User, 
   Calendar, 
   FileText, 
   Phone, 
-  HeartPulse 
+  HeartPulse,
+  MessageSquare
 } from 'lucide-react';
 
 const PatientDashboard = () => {
@@ -38,7 +40,7 @@ const PatientDashboard = () => {
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="grid grid-cols-2 md:grid-cols-5 mb-8">
+          <TabsList className="grid grid-cols-2 md:grid-cols-6 mb-8">
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="h-4 w-4" />
               <span className="hidden md:inline">Profile</span>
@@ -58,6 +60,10 @@ const PatientDashboard = () => {
             <TabsTrigger value="health" className="flex items-center gap-2">
               <HeartPulse className="h-4 w-4" />
               <span className="hidden md:inline">Health AI</span>
+            </TabsTrigger>
+            <TabsTrigger value="chat" className="flex items-center gap-2">
+              <MessageSquare className="h-4 w-4" />
+              <span className="hidden md:inline">AI Chat</span>
             </TabsTrigger>
           </TabsList>
           
@@ -79,6 +85,10 @@ const PatientDashboard = () => {
           
           <TabsContent value="health" className="space-y-4">
             <HealthSuggestions />
+          </TabsContent>
+          
+          <TabsContent value="chat" className="space-y-4">
+            <AIChatbot />
           </TabsContent>
         </Tabs>
       </main>
