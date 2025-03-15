@@ -81,7 +81,6 @@ Kaku Vilash Kumar Reddy
 G. Subhash
 Hema Sri
 Prathyusha
-CareFusion - Bringing AI and Healthcare Together 🚑✨
-Built on Google Project IDX with ❤️ by Team Code Rockers
+
 
 
