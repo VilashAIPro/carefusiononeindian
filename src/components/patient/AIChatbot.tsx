@@ -1,12 +1,12 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Smile, PaperclipIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type Message = {
   id: string;
@@ -21,6 +21,7 @@ const AIChatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Add initial welcome message
   useEffect(() => {
@@ -105,49 +106,64 @@ const AIChatbot = () => {
     }
   };
 
+  // Quick response buttons for common questions
+  const quickResponses = [
+    { text: "Headache", query: "What should I do for a headache?" },
+    { text: "Cold", query: "How to treat a cold?" },
+    { text: "Appointment", query: "I need to book an appointment" },
+  ];
+
+  const sendQuickResponse = (query: string) => {
+    setInput(query);
+    // Use a small timeout to show the text in the input before sending
+    setTimeout(() => {
+      handleSendMessage();
+    }, 100);
+  };
+
   return (
-    <Card className="flex flex-col h-[600px] w-full bg-white shadow-md overflow-hidden border border-gray-200">
-      <div className="p-4 border-b flex items-center gap-2 bg-primary text-primary-foreground">
+    <Card className="flex flex-col h-[calc(100vh-250px)] md:h-[600px] w-full bg-white shadow-md overflow-hidden border border-gray-200 rounded-xl">
+      <div className="p-3 md:p-4 border-b flex items-center gap-2 bg-gradient-to-r from-care-700 to-care-600 text-white">
         <Bot className="w-5 h-5" />
-        <h3 className="font-semibold">CareFusion AI Assistant</h3>
+        <h3 className="font-semibold text-sm md:text-base">CareFusion AI Assistant</h3>
       </div>
       
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 p-3 md:p-4">
+        <div className="space-y-3 md:space-y-4">
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
             >
               <div
-                className={`max-w-[80%] p-3 rounded-lg ${
+                className={`max-w-[85%] p-2.5 md:p-3 rounded-lg ${
                   message.sender === 'user'
-                    ? 'bg-primary text-primary-foreground ml-auto'
-                    : 'bg-muted'
+                    ? 'bg-care-600 text-white ml-auto rounded-tr-none'
+                    : 'bg-gray-100 rounded-tl-none'
                 }`}
               >
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-1.5 mb-1">
                   {message.sender === 'ai' ? (
-                    <Bot className="w-4 h-4" />
+                    <Bot className="w-3.5 h-3.5" />
                   ) : (
-                    <User className="w-4 h-4" />
+                    <User className="w-3.5 h-3.5" />
                   )}
-                  <span className="text-xs opacity-75">
+                  <span className="text-xs opacity-80">
                     {message.sender === 'user' ? 'You' : 'AI Assistant'}
                   </span>
                 </div>
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                <div className="text-xs opacity-75 mt-1 text-right">
+                <div className="text-xs opacity-70 mt-1 text-right">
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
               </div>
             </div>
           ))}
           {isLoading && (
-            <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-lg bg-muted">
-                <div className="flex items-center gap-2">
-                  <Bot className="w-4 h-4" />
+            <div className="flex justify-start animate-fade-in">
+              <div className="max-w-[85%] p-2.5 md:p-3 rounded-lg bg-gray-100 rounded-tl-none">
+                <div className="flex items-center gap-1.5">
+                  <Bot className="w-3.5 h-3.5" />
                   <div className="dot-typing"></div>
                 </div>
               </div>
@@ -157,7 +173,24 @@ const AIChatbot = () => {
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t">
+      {/* Quick response buttons - only visible on mobile */}
+      {isMobile && (
+        <div className="px-3 py-2 flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300">
+          {quickResponses.map((item, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="sm"
+              onClick={() => sendQuickResponse(item.query)}
+              className="flex-shrink-0 bg-gray-50 hover:bg-gray-100 text-xs rounded-full"
+            >
+              {item.text}
+            </Button>
+          ))}
+        </div>
+      )}
+      
+      <div className="p-3 md:p-4 border-t bg-gray-50">
         <div className="flex gap-2">
           <Input
             value={input}
@@ -165,16 +198,32 @@ const AIChatbot = () => {
             onKeyDown={handleKeyPress}
             placeholder="Type your health question here..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 bg-white border-gray-300 rounded-full text-sm md:text-base h-10 md:h-11 pl-4"
           />
           <Button 
             onClick={handleSendMessage} 
             disabled={isLoading || !input.trim()}
             size="icon"
+            className="rounded-full bg-care-600 hover:bg-care-700 text-white h-10 md:h-11 w-10 md:w-11 flex items-center justify-center shadow-sm transition-colors duration-200"
           >
-            <Send className="h-4 w-4" />
+            <Send className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
         </div>
+        {!isMobile && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {quickResponses.map((item, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                onClick={() => sendQuickResponse(item.query)}
+                className="bg-white hover:bg-gray-50 text-xs"
+              >
+                {item.text}
+              </Button>
+            ))}
+          </div>
+        )}
         <p className="text-xs text-muted-foreground mt-2">
           This AI assistant provides general health information only. Always consult a healthcare professional for medical advice.
         </p>
