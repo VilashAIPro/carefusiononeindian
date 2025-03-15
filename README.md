@@ -1,69 +1,87 @@
-# Welcome to your Lovable project
+🚀 Welcome to the CareFusion Project!
+An AI-powered, cross-platform Health Data Information & Management System (HDIMS) application for doctors and patients.
+Built with ❤️ using Google Project IDX, CareFusion bridges the gap between patients and healthcare providers, offering seamless communication, AI-driven health insights, and secure data management.
 
-## Project info
+📌 Project Info
+URL: https://idx.google.com/projects/your-carefusion-project-id
 
-**URL**: https://lovable.dev/projects/664a7a8d-c004-4ac0-8290-5c4d8d298ef4
+✨ How Can I Edit This Code?
+You have multiple ways to edit, update, and run CareFusion.
 
-## How can I edit this code?
+✅ Use Google Project IDX (Recommended)
+Simply visit the CareFusion Project on IDX.
+Start building and prompting right away!
+Any changes made via IDX will automatically sync with your GitHub repository.
 
-There are several ways of editing your application.
+✅ Use Your Local IDE
+Prefer local development? Clone this repo and get started!
+All changes will also reflect back on IDX when you push updates.
 
-**Use Lovable**
+You'll need Node.js & npm (recommend installing via nvm).
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/664a7a8d-c004-4ac0-8290-5c4d8d298ef4) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+Steps to run locally:
+sh
+Copy
+Edit
+# 1️⃣ Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2️⃣ Navigate to your project directory
+cd carefusion-app
 
-# Step 3: Install the necessary dependencies.
-npm i
+# 3️⃣ Install all dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4️⃣ Start the development server with hot reload
 npm run dev
-```
+✅ Edit Files Directly on GitHub
+Navigate to your desired file
+Click the pencil icon (top right corner of the file view)
+Edit & commit directly from GitHub’s UI
+✅ Use GitHub Codespaces
+Go to your repo’s Code button
+Click Codespaces > New Codespace
+Start editing instantly in the browser
+Commit and push changes when you're done!
+⚙️ Technologies Used in CareFusion
+Built with modern tools and technologies to ensure scalability, security, and an awesome user experience:
 
-**Edit a file directly in GitHub**
+🟦 React.js (Frontend - Web version)
+🟪 Flutter (Frontend - Mobile version)
+⚙️ Node.js + Express.js (Backend API)
+🌐 Google Project IDX (Development Environment)
+🟧 MongoDB (Database for medical records)
+🔥 Firebase Data Connect (Real-time sync and data handling)
+🔒 Firebase Authentication (Secure login system)
+🧠 Google Gemini API (AI Health Insights & Chatbot)
+🗺️ Google Maps API (Hospital/Clinic location services)
+🎨 shadcn-ui + Tailwind CSS (UI Components & Styling)
+🩺 Core Features of CareFusion
+Doctor & Patient Sign-Up/Login
+Separate Dashboards for Patients & Doctors
+Profile Management for both Users
+AI-Powered Appointment Booking System
+Real-Time Patient-Doctor Chat & Chatbot Assistance
+Medical Record Upload, Access, and History Viewing
+AI Health Insights & Predictive Analysis
+Data Security & Role-Based Access Control
+Future Ready: Telemedicine & Insurance Integration (Next Phase)
+🚀 How to Deploy CareFusion?
+Simply open Google Project IDX and click:
+Share -> Publish
+Your project will be hosted and available to users.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+🌍 Custom Domain Support
+IDX-hosted projects currently do not support custom domains directly.
+If you need a custom domain, deploy via Netlify or Vercel.
+Read more in the IDX Docs.
 
-**Use GitHub Codespaces**
+🙌 Contributors
+Kaku Vilash Kumar Reddy
+G. Subhash
+Hema Sri
+Prathyusha
+CareFusion - Bringing AI and Healthcare Together 🚑✨
+Built on Google Project IDX with ❤️ by Team Code Rockers
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/664a7a8d-c004-4ac0-8290-5c4d8d298ef4) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
