@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,15 +8,18 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
 
 interface AuthFormProps {
   isRegisterPage?: boolean;
 }
 
 const AuthForm = ({ isRegisterPage = false }: AuthFormProps) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>(isRegisterPage ? "register" : "login");
   const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState<"patient" | "doctor">("patient");
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
   // Form states
@@ -27,7 +31,7 @@ const AuthForm = ({ isRegisterPage = false }: AuthFormProps) => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
   
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate
@@ -40,16 +44,49 @@ const AuthForm = ({ isRegisterPage = false }: AuthFormProps) => {
       return;
     }
     
-    // Mock login logic - would connect to backend
-    toast({
-      title: "Success",
-      description: `Logged in as ${userType}. Redirecting...`,
-    });
+    setIsLoading(true);
     
-    // Redirect logic would be here (e.g., navigate to dashboard)
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Successfully logged in
+      toast({
+        title: "Success",
+        description: `Logged in successfully. Redirecting...`,
+      });
+      
+      // Redirect to the appropriate dashboard based on user type
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('user_type')
+        .eq('id', data.user.id)
+        .single();
+      
+      if (profileData?.user_type === 'doctor') {
+        navigate('/doctor-dashboard');
+      } else {
+        navigate('/patient-dashboard');
+      }
+      
+    } catch (error: any) {
+      toast({
+        title: "Login failed",
+        description: error.message || "An error occurred during login.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validate
@@ -71,13 +108,50 @@ const AuthForm = ({ isRegisterPage = false }: AuthFormProps) => {
       return;
     }
     
-    // Mock registration logic - would connect to backend
-    toast({
-      title: "Success",
-      description: `Registered as ${userType}. Redirecting...`,
-    });
+    setIsLoading(true);
     
-    // Redirect logic would be here
+    try {
+      // Sign up the user
+      const { data, error } = await supabase.auth.signUp({
+        email: registerEmail,
+        password: registerPassword,
+        options: {
+          data: {
+            name: registerName,
+            userType: userType,
+            doctorSerialNumber: userType === 'doctor' ? Date.now().toString() : null
+          }
+        }
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Successfully registered
+      toast({
+        title: "Registration successful",
+        description: `Account created as ${userType}. Please check your email for verification.`,
+      });
+      
+      // If email verification is not required, redirect to the appropriate dashboard
+      if (data?.user && !data.user.identities?.some(identity => identity.identity_data.email_verified === false)) {
+        if (userType === 'doctor') {
+          navigate('/doctor-dashboard');
+        } else {
+          navigate('/patient-dashboard');
+        }
+      }
+      
+    } catch (error: any) {
+      toast({
+        title: "Registration failed",
+        description: error.message || "An error occurred during registration.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -169,8 +243,12 @@ const AuthForm = ({ isRegisterPage = false }: AuthFormProps) => {
                 </label>
               </div>
               
-              <Button type="submit" className="glass-button w-full py-6">
-                Sign In
+              <Button 
+                type="submit" 
+                className="glass-button w-full py-6"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Signing In...' : 'Sign In'}
               </Button>
             </form>
           </TabsContent>
@@ -256,8 +334,12 @@ const AuthForm = ({ isRegisterPage = false }: AuthFormProps) => {
                 </label>
               </div>
               
-              <Button type="submit" className="glass-button w-full py-6">
-                Create Account
+              <Button 
+                type="submit" 
+                className="glass-button w-full py-6"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
           </TabsContent>
