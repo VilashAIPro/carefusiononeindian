@@ -28,7 +28,7 @@ const PatientDashboard = () => {
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
       
-      <main className="flex-grow container mx-auto px-4 py-6 md:py-8">
+      <main className="flex-grow container mx-auto px-4 py-6 md:py-8 mt-4">
         <div className="mb-4 md:mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Patient Dashboard</h1>
           <p className="text-sm md:text-base text-gray-600 mt-1 md:mt-2">
